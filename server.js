@@ -1,0 +1,148 @@
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config()
+}
+
+const express = require('express')
+const app = express()
+const port = 3000
+
+const bcrypt = require('bcrypt')
+const passport = require('passport')
+const flash = require('express-flash')
+const session = require('express-session')
+const methodOverride = require('method-override')
+
+const usrs = []
+
+//creates and authenticates user password
+const createPassport = require('./passportConfig')//because it is export as initilized 
+createPassport(
+  passport, 
+  email => usrs.find(user => user.email === email), 
+  id => usrs.find(user => user.id === id)
+  )//initilized function that is initalize(passport, getUserByEmail, getUserById)
+
+// looks for the ejs file in the views folder
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: false }))
+//send warnign that the password is incorrect
+app.use(flash());
+//used to save information on the server
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+  }))
+//calls the function from the passportconfig.js file
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(methodOverride('_method'))
+
+//used to check the name which is visible to the user
+app.get('/', checkAuthenticated, (req, res) => {
+  res.render('pages/index', { name: req.user.name })
+})
+
+
+app.get('/login', checkNotAuthenticated, (req, res) => {
+  res.render('pages/login')
+})
+
+//1. accsses the cs and the js files in public folder
+app.use(express.static('public'))
+app.use('/css', express.static(__dirname + '/CSS'))
+app.use('/js', express.static(__dirname + '/JS'))
+app.use('/txt', express.static(__dirname + '/TXT'))
+
+//uses post to login and send to the index page
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
+
+//renders out tthe register page if not authenticated
+app.get('/register', checkNotAuthenticated, (req, res) => {
+  res.render('pages/register')
+})
+// user post to store private secure data such as passwords
+app.post('/register', checkNotAuthenticated, async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 8)
+    usrs.push({
+      id: Date.now().toString(),
+      name: req.body.name,
+      email: req.body.email,
+      password: hashedPassword
+    })
+    res.redirect('/login')
+  } catch {
+    res.redirect('/register')
+  }
+  console.log(usrs)
+})
+
+//log user out
+app.delete('/logout', (req, res) => {
+  req.logOut()
+  res.redirect('/login')
+})
+//function for verifying
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next()
+  }
+
+  res.redirect('/login')
+}
+//function checks authentication and redirects to index.ejs
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect('/')
+  }
+  next()
+}
+
+
+//listens on port 3000 that we created for out localhost
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
+
+
+
+/*
+// index page
+//app.get('/', function(req, res) {res.render('pages/index.ejs');});//,{name: "Devon"}
+
+// Tic-Tac-Toe page
+app.get('/tictactoe', function(req, res) {res.render('pages/tictactoe');
+app.post('/tictactoe', function(req, res){})
+});
+
+
+//app.get('/register',checkNotAuthenticated ,function(req, res) {res.render('pages/register');
+//})
+
+
+// Login page
+app.get('/login', function(req, res) {res.render('pages/login.ejs');  
+app.post('/login', function(req, res){})
+});
+
+//used to check the name which is visible to the user
+app.get('/', checkAuthenticated, (req, res) => {
+  res.render('pages/index.ejs', { name: req.user.name })
+})
+
+app.get('/login', checkAuthenticated, (req, res) => {
+  res.render('pages/login.ejs')
+})
+
+
+
+//accsses the cs and the js files in public folder
+app.use(express.static('public'));
+app.use('/css', express.static(__dirname + '/CSS'));
+app.use('/js', express.static(__dirname + '/JS'));
+
+*/

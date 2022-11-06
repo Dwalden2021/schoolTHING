@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('../partials/head'); %>
+    <title>Register</title>
+</head>
+<body class="container">
+
+<header>
+  <%- include('../partials/header'); %>
+  
+</header>
+
+<main>
+    <div>
+        <h1>Create Login</h1>
+    </div>
+    
+    <div class="center">
+        <form action="/register" method="POST"></form>
+                <label for="name">User</label>
+                <input type="text" name="name" id="name" required>
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" required>
+                <label for="password">Password</label>
+                <input type="text" id="password" name="password" required>
+            <section>
+                <button type="submit">Submit</button>
+            </section>
+        </form>
+    </div>
+
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+<script src="/JS/scripts.js" async defer></script>
+</body>
+</html>

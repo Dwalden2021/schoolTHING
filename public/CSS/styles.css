@@ -1,0 +1,46 @@
+
+h1{
+    color: blue;
+}
+body{
+    background-color: beige;
+}
+ul {
+    list-style-type: none;
+    height: 50px;
+    background-color: rgba(204, 204, 204, 0.585);
+    margin: 0;
+    padding: 0;
+    line-height:50px;
+}
+
+li {
+    display: inline;
+    padding: 10px;
+    font-size: 20px;
+}
+  
+#footer {
+    background-color: rgba(204, 204, 204, 0.585);
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+
+label {
+    display: inline-block;
+    width: 80px;
+    text-align: left;
+    padding: 5px
+
+}
+  
+.center {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+}
+
+button{
+    padding: 10px
+}
