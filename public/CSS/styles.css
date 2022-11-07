@@ -31,16 +31,48 @@ label {
     display: inline-block;
     width: 80px;
     text-align: left;
-    padding: 5px
-
+    padding: 5px;
+    font-size: 20px;
 }
   
 .center {
     margin: auto;
-    width: 60%;
-    padding: 10px;
+    width: 50%;
+    padding: 5px;
+    justify-content: center;
+    text-align: center;
 }
 
 button{
-    padding: 10px
+    padding: 10px;
+    font-size: 20px;
 }
+
+table{
+    border-collapse: collapse;
+    border: 2px;
+    width: 100%;
+    font-size: 20px;
+}
+
+#instructions{
+    border: 1px solid #0e11d7;
+    text-align: center;
+    padding: 8px;
+}
+.tac{
+    text-align: center;
+    width: 20vw;
+    height: 10vh;
+}
+
+#bt1, #bt2, #bt3, #bt4, #bt5,
+    #bt6, #bt7, #bt8, #bt {
+        width: 20vw;
+        height: 10h;
+        margin: auto;
+        border: 1px solid gray;
+        border-radius: 6px;
+        font-size: 30px;
+        text-align: center;
+    }
